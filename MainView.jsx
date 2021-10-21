@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import Item from './Item';
 
 class MainView extends Component {
@@ -14,7 +14,14 @@ class MainView extends Component {
   write(char) {
     const latsChar = this.state.calcs.slice(-1);
 
-    if (/[^\d]/.test(latsChar) && /[^\d]/.test(char)) return;
+    if (this.state.calcs.length === 0 && char === '-') {
+      this.setState((state) => {
+        return {
+          calcs: `${state.calcs}${char}`,
+        };
+      });
+      return;
+    } else if ((/[^\d]/.test(latsChar) && /[^\d]/.test(char)) || (this.state.calcs.length === 0 && /[^\d]/.test(char))) return;
 
     this.setState((state) => {
       return {
@@ -287,6 +294,7 @@ const styles = StyleSheet.create({
   calculation: {
     padding: 5,
     paddingRight: 10,
+    paddingTop: StatusBar.currentHeight,
     flex: 2,
     flexDirection: 'row',
     justifyContent: 'flex-end',
